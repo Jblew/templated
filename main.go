@@ -3,11 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"text/template"
 
+	"github.com/Masterminds/sprig/v3"
 	"github.com/gorilla/mux"
 )
 
@@ -30,7 +31,10 @@ var templates *template.Template
 
 func main() {
 	config := loadConfig()
-	templates = template.Must(template.ParseGlob(fmt.Sprintf("%s/*", config.TemplatesDir)))
+
+	templatesGlob := fmt.Sprintf("%s/*", config.TemplatesDir)
+	templates = template.Must(template.New("base").Funcs(sprig.FuncMap()).ParseGlob(templatesGlob))
+
 	staticRoute := "/static/"
 	staticFileServer := http.FileServer(http.Dir(config.StaticDir))
 	http.Handle(staticRoute, http.StripPrefix(staticRoute, staticFileServer))
