@@ -80,14 +80,14 @@ func loadConfig() ServeConfig {
 
 func localFuncMap() map[string]interface{} {
 	funcMap := make(map[string]interface{})
-	funcMap["fetchJSON"] = func(arg1 string) (string, error) {
+	funcMap["fetchJSON"] = func(arg1 string) (map[string]interface{}, error) {
 		u, _ := url.ParseRequestURI(arg1)
 		if u.Scheme == "http" || u.Scheme == "https" {
-			return fmt.Sprintf("[Would fetch remote URL from \"%s\"]", u.String()), nil
+			return fetchJSONFromURL(u.String())
 		} else if u.Scheme == "file" {
-			return fmt.Sprintf("[Would read file \"%s\"]", u.Path), nil
+			return readJSONFile(u.Path)
 		} else {
-			return "", fmt.Errorf("Unsupported url scheme \"%s\" in URL: \"%s\"", u.Scheme, arg1)
+			return make(map[string]interface{}), fmt.Errorf("Unsupported url scheme \"%s\" in URL: \"%s\"", u.Scheme, arg1)
 		}
 	}
 	return funcMap
