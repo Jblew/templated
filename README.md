@@ -42,3 +42,12 @@ Usage:
 7. Headers can be passed to the `fetchJSON` — just list them in config file: `"passHeaders": [ "X-User-Roles" ]`
 
 8. `fetchJSON` can fetch local files as well: `{{ $json := fetchJSON "file://mock/data.json" }}`
+
+9. Use within you docker container:
+   ```Dockerfile
+   FROM jedrzejlewandowski/templated:1.0.0
+   WORKDIR /app
+   ADD serve.json /app/serve.json
+   ADD templates /app/templates
+   CMD: ["/bin/templated"]
+   ```
