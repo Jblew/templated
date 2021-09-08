@@ -17,6 +17,7 @@ type ServeConfig struct {
 	StaticDir    string       `json:"staticDir"`
 	TemplatesDir string       `json:"templatesDir"`
 	Pages        []PageConfig `json:"pages"`
+	PassHeaders  []string     `json:"passHeaders"`
 }
 
 type PageConfig struct {
@@ -35,7 +36,7 @@ func main() {
 	config := loadConfig()
 
 	templatesGlob := fmt.Sprintf("%s/*", config.TemplatesDir)
-	templates = template.Must(template.New("base").Funcs(sprig.FuncMap()).Funcs(localFuncMap()).ParseGlob(templatesGlob))
+	templates = template.Must(template.New("base").Funcs(sprig.FuncMap()).Funcs(localFuncMap(config)).ParseGlob(templatesGlob))
 
 	staticRoute := "/static/"
 	staticFileServer := http.FileServer(http.Dir(config.StaticDir))
@@ -80,13 +81,13 @@ func loadConfig() ServeConfig {
 	return config
 }
 
-func localFuncMap() map[string]interface{} {
+func localFuncMap(config ServeConfig) map[string]interface{} {
 	funcMap := make(map[string]interface{})
 	funcMap["fetchJSON"] = func(arg1 string, headers map[string][]string) (map[string]interface{}, error) {
 		log.Printf("Headers from context: %+v", headers)
 		u, _ := url.ParseRequestURI(arg1)
 		if u.Scheme == "http" || u.Scheme == "https" {
-			return fetchJSONFromURL(u.String())
+			return fetchJSONFromURL(u.String(), getEligibleHeaders(headers, config.PassHeaders))
 		} else if u.Scheme == "file" {
 			return readJSONFile(u.Path)
 		} else {
