@@ -1,5 +1,5 @@
-module github.com/Jblew/extensa-frontend
+module github.com/Jblew/templated
 
-go 1.17
+go 1.14
 
-require github.com/gorilla/mux v1.8.0 // indirect
+require github.com/gorilla/mux v1.8.0
