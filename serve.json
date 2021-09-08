@@ -1,6 +1,8 @@
 {
+  "staticDir": "./example/static",
+  "templatesDir": "./example/templates",
   "pages": [
     { "url": "/", "template": "index" },
-    { "url": "/role/{roleName}", "template": "role" }
+    { "url": "/category/{category}", "template": "role" }
   ]
 }

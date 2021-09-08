@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -11,7 +12,9 @@ import (
 )
 
 type ServeConfig struct {
-	Pages []PageConfig `json:"pages"`
+	StaticDir    string       `json:"staticDir"`
+	TemplatesDir string       `json:"templatesDir"`
+	Pages        []PageConfig `json:"pages"`
 }
 
 type PageConfig struct {
@@ -23,12 +26,13 @@ type TemplateData struct {
 	Params map[string]string
 }
 
-var templates = template.Must(template.ParseGlob("templates/*"))
+var templates *template.Template
 
 func main() {
 	config := loadConfig()
+	templates = template.Must(template.ParseGlob(fmt.Sprintf("%s/*", config.TemplatesDir)))
 	staticRoute := "/static/"
-	staticFileServer := http.FileServer(http.Dir("./static"))
+	staticFileServer := http.FileServer(http.Dir(config.StaticDir))
 	http.Handle(staticRoute, http.StripPrefix(staticRoute, staticFileServer))
 
 	r := buildMux(config)
@@ -61,7 +65,10 @@ func buildMux(config ServeConfig) *mux.Router {
 
 func loadConfig() ServeConfig {
 	bytes, _ := ioutil.ReadFile("serve.json")
-	var config ServeConfig
+	config := ServeConfig{
+		StaticDir:    "static",
+		TemplatesDir: "templates",
+	}
 	json.Unmarshal(bytes, &config)
 	return config
 }
