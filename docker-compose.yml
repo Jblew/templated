@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  employees:
+  frontend:
     build: .
     ports:
       - 8082:80

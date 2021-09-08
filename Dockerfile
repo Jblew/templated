@@ -6,4 +6,6 @@ COPY --from=schemaVerCheck /bin/schemaver-check /bin/schemaver-check
 WORKDIR /app
 ADD . /app
 
+RUN /app/go-build.sh
+
 CMD ["/bin/sh", "-c", "/app/startpoint.sh"]
