@@ -49,5 +49,5 @@ Usage:
    WORKDIR /app
    ADD serve.json /app/serve.json
    ADD templates /app/templates
-   CMD: ["/bin/templated"]
+   CMD ["/bin/templated"]
    ```
