@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func marshallToString(obj interface{}) string {
@@ -45,7 +46,9 @@ func fetchJSONFromURL(url string, headers map[string][]string) (map[string]inter
 		}
 	}
 
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: 300 * time.Millisecond,
+	}
 	resp, err := client.Do(req)
 	if err != nil {
 		return out, err
