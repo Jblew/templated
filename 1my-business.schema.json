@@ -1,0 +1,1238 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "AllEmployees": {
+            "properties": {
+                "SchemaVer": {
+                    "enum": [
+                        "3.0.0"
+                    ],
+                    "type": "string"
+                },
+                "allEmployees": {
+                    "items": {
+                        "$ref": "#/definitions/Employee"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "allEmployees"
+            ],
+            "type": "object"
+        },
+        "AnyChart": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/PieChart"
+                },
+                {
+                    "$ref": "#/definitions/ProgressBar"
+                }
+            ]
+        },
+        "Chart": {
+            "properties": {
+                "SchemaVer": {
+                    "enum": [
+                        "4.0.0"
+                    ],
+                    "type": "string"
+                },
+                "chart": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/PieChart"
+                        },
+                        {
+                            "$ref": "#/definitions/ProgressBar"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "chart"
+            ],
+            "type": "object"
+        },
+        "CompanyStructure": {
+            "properties": {
+                "SchemaVer": {
+                    "enum": [
+                        "3.0.0"
+                    ],
+                    "type": "string"
+                },
+                "anchor": {
+                    "$ref": "#/definitions/Role"
+                },
+                "mtp": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "anchor",
+                "mtp",
+                "name"
+            ],
+            "type": "object"
+        },
+        "Complaint": {
+            "properties": {
+                "SchemaVer": {
+                    "enum": [
+                        "1.0.0"
+                    ],
+                    "type": "string"
+                },
+                "contents": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "contents",
+                "title"
+            ],
+            "type": "object"
+        },
+        "DashboardConfig": {
+            "properties": {
+                "SchemaVer": {
+                    "enum": [
+                        "1.0.0"
+                    ],
+                    "type": "string"
+                },
+                "pages": {
+                    "$ref": "#/definitions/Record<string,{title:string;rows:DashboardRow[];}>"
+                },
+                "title": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "pages",
+                "title"
+            ],
+            "type": "object"
+        },
+        "DashboardElement": {
+            "anyOf": [
+                {
+                    "properties": {
+                        "element": {
+                            "default": "chart",
+                            "enum": [
+                                "chart"
+                            ],
+                            "type": "string"
+                        },
+                        "url": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "element",
+                        "url"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "element": {
+                            "default": "text",
+                            "enum": [
+                                "text"
+                            ],
+                            "type": "string"
+                        },
+                        "text": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "element",
+                        "text"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "element": {
+                            "default": "form",
+                            "enum": [
+                                "form"
+                            ],
+                            "type": "string"
+                        },
+                        "url": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "element",
+                        "url"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "element": {
+                            "default": "button",
+                            "enum": [
+                                "button"
+                            ],
+                            "type": "string"
+                        },
+                        "text": {
+                            "type": "string"
+                        },
+                        "url": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "element",
+                        "text",
+                        "url"
+                    ],
+                    "type": "object"
+                }
+            ]
+        },
+        "DashboardPageConfig": {
+            "properties": {
+                "rows": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "properties": {
+                                    "container": {
+                                        "default": "single",
+                                        "enum": [
+                                            "single"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "elements": {
+                                        "items": [
+                                            {
+                                                "anyOf": [
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "chart",
+                                                                "enum": [
+                                                                    "chart"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "url"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "text",
+                                                                "enum": [
+                                                                    "text"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "text": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "text"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "form",
+                                                                "enum": [
+                                                                    "form"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "url"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "button",
+                                                                "enum": [
+                                                                    "button"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "text": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "text",
+                                                            "url"
+                                                        ],
+                                                        "type": "object"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "maxItems": 1,
+                                        "minItems": 1,
+                                        "type": "array"
+                                    }
+                                },
+                                "required": [
+                                    "container",
+                                    "elements"
+                                ],
+                                "type": "object"
+                            },
+                            {
+                                "properties": {
+                                    "container": {
+                                        "default": "double",
+                                        "enum": [
+                                            "double"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "elements": {
+                                        "items": [
+                                            {
+                                                "anyOf": [
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "chart",
+                                                                "enum": [
+                                                                    "chart"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "url"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "text",
+                                                                "enum": [
+                                                                    "text"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "text": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "text"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "form",
+                                                                "enum": [
+                                                                    "form"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "url"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "button",
+                                                                "enum": [
+                                                                    "button"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "text": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "text",
+                                                            "url"
+                                                        ],
+                                                        "type": "object"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "anyOf": [
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "chart",
+                                                                "enum": [
+                                                                    "chart"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "url"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "text",
+                                                                "enum": [
+                                                                    "text"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "text": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "text"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "form",
+                                                                "enum": [
+                                                                    "form"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "url"
+                                                        ],
+                                                        "type": "object"
+                                                    },
+                                                    {
+                                                        "properties": {
+                                                            "element": {
+                                                                "default": "button",
+                                                                "enum": [
+                                                                    "button"
+                                                                ],
+                                                                "type": "string"
+                                                            },
+                                                            "text": {
+                                                                "type": "string"
+                                                            },
+                                                            "url": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "element",
+                                                            "text",
+                                                            "url"
+                                                        ],
+                                                        "type": "object"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "maxItems": 2,
+                                        "minItems": 2,
+                                        "type": "array"
+                                    }
+                                },
+                                "required": [
+                                    "container",
+                                    "elements"
+                                ],
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "title": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "rows",
+                "title"
+            ],
+            "type": "object"
+        },
+        "DashboardRow": {
+            "anyOf": [
+                {
+                    "properties": {
+                        "container": {
+                            "default": "single",
+                            "enum": [
+                                "single"
+                            ],
+                            "type": "string"
+                        },
+                        "elements": {
+                            "items": [
+                                {
+                                    "anyOf": [
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "chart",
+                                                    "enum": [
+                                                        "chart"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "url"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "text",
+                                                    "enum": [
+                                                        "text"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "text": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "text"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "form",
+                                                    "enum": [
+                                                        "form"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "url"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "button",
+                                                    "enum": [
+                                                        "button"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "text": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "text",
+                                                "url"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "maxItems": 1,
+                            "minItems": 1,
+                            "type": "array"
+                        }
+                    },
+                    "required": [
+                        "container",
+                        "elements"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "container": {
+                            "default": "double",
+                            "enum": [
+                                "double"
+                            ],
+                            "type": "string"
+                        },
+                        "elements": {
+                            "items": [
+                                {
+                                    "anyOf": [
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "chart",
+                                                    "enum": [
+                                                        "chart"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "url"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "text",
+                                                    "enum": [
+                                                        "text"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "text": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "text"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "form",
+                                                    "enum": [
+                                                        "form"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "url"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "button",
+                                                    "enum": [
+                                                        "button"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "text": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "text",
+                                                "url"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "anyOf": [
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "chart",
+                                                    "enum": [
+                                                        "chart"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "url"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "text",
+                                                    "enum": [
+                                                        "text"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "text": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "text"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "form",
+                                                    "enum": [
+                                                        "form"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "url"
+                                            ],
+                                            "type": "object"
+                                        },
+                                        {
+                                            "properties": {
+                                                "element": {
+                                                    "default": "button",
+                                                    "enum": [
+                                                        "button"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "text": {
+                                                    "type": "string"
+                                                },
+                                                "url": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "element",
+                                                "text",
+                                                "url"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "maxItems": 2,
+                            "minItems": 2,
+                            "type": "array"
+                        }
+                    },
+                    "required": [
+                        "container",
+                        "elements"
+                    ],
+                    "type": "object"
+                }
+            ]
+        },
+        "Employee": {
+            "properties": {
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "roles": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "username": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "firstName",
+                "lastName",
+                "roles",
+                "username"
+            ],
+            "type": "object"
+        },
+        "EmptySuccess": {
+            "properties": {
+                "SchemaVer": {
+                    "enum": [
+                        "1.0.0"
+                    ],
+                    "type": "string"
+                },
+                "ok": {
+                    "enum": [
+                        true
+                    ],
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "ok"
+            ],
+            "type": "object"
+        },
+        "Form": {
+            "properties": {
+                "rows": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "properties": {
+                                    "specs": {
+                                        "properties": {
+                                            "title": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "title"
+                                        ],
+                                        "type": "object"
+                                    },
+                                    "type": {
+                                        "default": "line",
+                                        "enum": [
+                                            "line"
+                                        ],
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "specs",
+                                    "type"
+                                ],
+                                "type": "object"
+                            },
+                            {
+                                "properties": {
+                                    "specs": {
+                                        "properties": {
+                                            "lines": {
+                                                "type": "number"
+                                            },
+                                            "title": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "lines",
+                                            "title"
+                                        ],
+                                        "type": "object"
+                                    },
+                                    "type": {
+                                        "default": "textarea",
+                                        "enum": [
+                                            "textarea"
+                                        ],
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "specs",
+                                    "type"
+                                ],
+                                "type": "object"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "default": "submit-cancel",
+                    "enum": [
+                        "submit-cancel"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "rows",
+                "type"
+            ],
+            "type": "object"
+        },
+        "FormConfig": {
+            "properties": {
+                "SchemaVer": {
+                    "enum": [
+                        "1.0.0"
+                    ],
+                    "type": "string"
+                },
+                "form": {
+                    "properties": {
+                        "rows": {
+                            "items": {
+                                "anyOf": [
+                                    {
+                                        "properties": {
+                                            "specs": {
+                                                "properties": {
+                                                    "title": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "title"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "type": {
+                                                "default": "line",
+                                                "enum": [
+                                                    "line"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "specs",
+                                            "type"
+                                        ],
+                                        "type": "object"
+                                    },
+                                    {
+                                        "properties": {
+                                            "specs": {
+                                                "properties": {
+                                                    "lines": {
+                                                        "type": "number"
+                                                    },
+                                                    "title": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "lines",
+                                                    "title"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "type": {
+                                                "default": "textarea",
+                                                "enum": [
+                                                    "textarea"
+                                                ],
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "specs",
+                                            "type"
+                                        ],
+                                        "type": "object"
+                                    }
+                                ]
+                            },
+                            "type": "array"
+                        },
+                        "type": {
+                            "default": "submit-cancel",
+                            "enum": [
+                                "submit-cancel"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "rows",
+                        "type"
+                    ],
+                    "type": "object"
+                }
+            },
+            "required": [
+                "form"
+            ],
+            "type": "object"
+        },
+        "FormRow": {
+            "anyOf": [
+                {
+                    "properties": {
+                        "specs": {
+                            "properties": {
+                                "title": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "title"
+                            ],
+                            "type": "object"
+                        },
+                        "type": {
+                            "default": "line",
+                            "enum": [
+                                "line"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "specs",
+                        "type"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "properties": {
+                        "specs": {
+                            "properties": {
+                                "lines": {
+                                    "type": "number"
+                                },
+                                "title": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "lines",
+                                "title"
+                            ],
+                            "type": "object"
+                        },
+                        "type": {
+                            "default": "textarea",
+                            "enum": [
+                                "textarea"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "specs",
+                        "type"
+                    ],
+                    "type": "object"
+                }
+            ]
+        },
+        "LabeledPartitionChartValue": {
+            "properties": {
+                "colorHex": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "label",
+                "value"
+            ],
+            "type": "object"
+        },
+        "PieChart": {
+            "properties": {
+                "type": {
+                    "enum": [
+                        "pie"
+                    ],
+                    "type": "string"
+                },
+                "values": {
+                    "items": {
+                        "$ref": "#/definitions/LabeledPartitionChartValue"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "type",
+                "values"
+            ],
+            "type": "object"
+        },
+        "Process": {
+            "properties": {
+                "mermaid": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "purpose": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "mermaid",
+                "name",
+                "purpose"
+            ],
+            "type": "object"
+        },
+        "ProgressBar": {
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "enum": [
+                        "progress"
+                    ],
+                    "type": "string"
+                },
+                "values": {
+                    "$ref": "#/definitions/LabeledPartitionChartValue"
+                }
+            },
+            "required": [
+                "title",
+                "type",
+                "values"
+            ],
+            "type": "object"
+        },
+        "Record<string,{title:string;rows:DashboardRow[];}>": {
+            "type": "object"
+        },
+        "Role": {
+            "properties": {
+                "accountabilities": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "domains": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "processes": {
+                    "items": {
+                        "$ref": "#/definitions/Process"
+                    },
+                    "type": "array"
+                },
+                "purpose": {
+                    "type": "string"
+                },
+                "roles": {
+                    "items": {
+                        "$ref": "#/definitions/Role"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "accountabilities",
+                "domains",
+                "name",
+                "purpose"
+            ],
+            "type": "object"
+        }
+    }
+}
+

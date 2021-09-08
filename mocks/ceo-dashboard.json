@@ -1,0 +1,40 @@
+{
+  "title": "CEO Dashboard",
+  "pages": {
+    "main": {
+      "title": "Main Page",
+      "rows": [
+        {
+          "container": "double",
+          "elements": [
+            { "element": "chart", "url": "/ceo/charts/moneySpent" },
+            { "element": "text", "text": "Welcome Chief!" }
+          ]
+        },
+        {
+          "container": "single",
+          "elements": [{ "element": "form", "url": "/ceo/forms/newTask" }]
+        },
+        {
+          "container": "single",
+          "elements": [
+            {
+              "element": "button",
+              "text": "CEO Dashboard",
+              "url": "https://github/orgs/1my/projects/ceo"
+            }
+          ]
+        }
+      ]
+    },
+    "hospitalTasks": {
+      "title": "Main page",
+      "rows": [
+        {
+          "container": "single",
+          "elements": [{ "element": "text", "text": "To be specified" }]
+        }
+      ]
+    }
+  }
+}
