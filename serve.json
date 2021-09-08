@@ -1,0 +1,6 @@
+{
+  "pages": [
+    { "url": "/", "template": "index" },
+    { "url": "/role/{roleName}", "template": "role" }
+  ]
+}
