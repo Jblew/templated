@@ -1,10 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"text/template"
 )
+
+var templates = template.Must(template.ParseGlob("templates/*"))
 
 func main() {
 	staticRoute := "/static/"
@@ -18,6 +20,11 @@ func main() {
 }
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
-	response := make(map[string]interface{})
-	fmt.Fprintf(w, "%s", marshallToString(response))
+	err := templates.ExecuteTemplate(w, "index", nil)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Println(err)
+		return
+	}
 }
