@@ -3,8 +3,8 @@ Simple go template server that supports HTTP calls inside templates. Configurabl
 
 Usage:
 
-1. Place templates in ${PWD}/templates
-2. 
+1. Place templates in `${PWD}/templates`
+
 3. Each template needs to have define block:
    ```html
     {{define "index"}}
