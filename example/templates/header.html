@@ -5,11 +5,15 @@
     <li>Source: <a href="https://github.com/Jblew/templated"
       >https://github.com/Jblew/templated</a
     ></li>
+    <li>.Params: {{ .Params }}</li>
+    <li>$.Params: {{ $.Params }}</li>
+    <li>.Headers: {{ .Headers }}</li>
+    <li>$.Headers: {{ $.Headers }}</li>
     <li>Sprig functions example: {{ "hello!" | upper | repeat 5 }}</li>
-    <li>fetchJSON from env: {{ env "JSON_FETCH_URI" | fetchJSON }}</li>
-    <li>fetchJSON from env into variable: [ {{ $result := (env "JSON_FETCH_URI" | fetchJSON) }} ] [ {{ $result }} ]</li>
-    <li>fetchJSON from file: {{ fetchJSON "file:///app/serve.json" }}</li>
-    <li>fetchJSON from host: {{ fetchJSON "https://api.github.com/users/jblew" }}</li>
+    <li>fetchJSON from env: {{ fetchJSON (env "JSON_FETCH_URI") $.Headers }}</li>
+    <li>fetchJSON from env into variable: [ {{ $result := (fetchJSON (env "JSON_FETCH_URI") $.Headers) }} ] [ {{ $result }} ]</li>
+    <li>fetchJSON from file: {{ fetchJSON "file:///app/serve.json" $.Headers }}</li>
+    <li>fetchJSON from host: {{ fetchJSON "https://api.github.com/users/jblew" $.Headers }}</li>
   </ul>
 
 </p>

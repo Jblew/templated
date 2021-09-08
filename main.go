@@ -25,7 +25,8 @@ type PageConfig struct {
 }
 
 type TemplateData struct {
-	Params map[string]string
+	Params  map[string]string
+	Headers map[string][]string
 }
 
 var templates *template.Template
@@ -47,10 +48,19 @@ func main() {
 	log.Fatal(http.ListenAndServe(":80", nil))
 }
 
+func buildMux(config ServeConfig) *mux.Router {
+	r := mux.NewRouter()
+	for _, page := range config.Pages {
+		r.HandleFunc(page.URL, makePageHandler(page.Template))
+	}
+	return r
+}
+
 func makePageHandler(templateName string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
-		data := TemplateData{Params: params}
+		log.Printf("Headers: %+v", r.Header)
+		data := TemplateData{Params: params, Headers: r.Header}
 		err := templates.ExecuteTemplate(w, templateName, data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -58,14 +68,6 @@ func makePageHandler(templateName string) func(http.ResponseWriter, *http.Reques
 			return
 		}
 	}
-}
-
-func buildMux(config ServeConfig) *mux.Router {
-	r := mux.NewRouter()
-	for _, page := range config.Pages {
-		r.HandleFunc(page.URL, makePageHandler(page.Template))
-	}
-	return r
 }
 
 func loadConfig() ServeConfig {
@@ -80,7 +82,8 @@ func loadConfig() ServeConfig {
 
 func localFuncMap() map[string]interface{} {
 	funcMap := make(map[string]interface{})
-	funcMap["fetchJSON"] = func(arg1 string) (map[string]interface{}, error) {
+	funcMap["fetchJSON"] = func(arg1 string, headers map[string][]string) (map[string]interface{}, error) {
+		log.Printf("Headers from context: %+v", headers)
 		u, _ := url.ParseRequestURI(arg1)
 		if u.Scheme == "http" || u.Scheme == "https" {
 			return fetchJSONFromURL(u.String())
