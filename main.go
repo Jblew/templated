@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 
 	"github.com/Masterminds/sprig/v3"
 	"github.com/gorilla/mux"
@@ -33,7 +34,7 @@ func main() {
 	config := loadConfig()
 
 	templatesGlob := fmt.Sprintf("%s/*", config.TemplatesDir)
-	templates = template.Must(template.New("base").Funcs(sprig.FuncMap()).ParseGlob(templatesGlob))
+	templates = template.Must(template.New("base").Funcs(sprig.FuncMap()).Funcs(localFuncMap()).ParseGlob(templatesGlob))
 
 	staticRoute := "/static/"
 	staticFileServer := http.FileServer(http.Dir(config.StaticDir))
@@ -75,4 +76,19 @@ func loadConfig() ServeConfig {
 	}
 	json.Unmarshal(bytes, &config)
 	return config
+}
+
+func localFuncMap() map[string]interface{} {
+	funcMap := make(map[string]interface{})
+	funcMap["fetchJSON"] = func(arg1 string) (string, error) {
+		u, _ := url.ParseRequestURI(arg1)
+		if u.Scheme == "http" || u.Scheme == "https" {
+			return fmt.Sprintf("[Would fetch remote URL from \"%s\"]", u.String()), nil
+		} else if u.Scheme == "file" {
+			return fmt.Sprintf("[Would read file \"%s\"]", u.Path), nil
+		} else {
+			return "", fmt.Errorf("Unsupported url scheme \"%s\" in URL: \"%s\"", u.Scheme, arg1)
+		}
+	}
+	return funcMap
 }

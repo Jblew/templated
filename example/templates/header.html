@@ -6,6 +6,10 @@
       >https://github.com/Jblew/templated</a
     ></li>
     <li>Sprig functions example: {{ "hello!" | upper | repeat 5 }}</li>
+    <li>fetchJSON from env: {{ env "JSON_FETCH_URI" | fetchJSON }}</li>
+    <li>fetchJSON from env into variable: [ {{ $result := (env "JSON_FETCH_URI" | fetchJSON) }} ] [ {{ $result }} ]</li>
+    <li>fetchJSON from file: {{ fetchJSON "file:///app/serve.json" }}</li>
+    <li>fetchJSON from host: {{ fetchJSON "https://api.github.com/users/jblew" }}</li>
   </ul>
 
 </p>

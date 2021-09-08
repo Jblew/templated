@@ -5,3 +5,5 @@ services:
     build: .
     ports:
       - 8083:80
+    environment:
+      JSON_FETCH_URI: "file:///app/serve.json"
