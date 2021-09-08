@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  employees:
+    build: .
+    ports:
+      - 8082:80
+    environment:
+      SCHEMAVERCHECK_SKIP_REMOTE_CHECK: 1
