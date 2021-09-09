@@ -60,14 +60,14 @@ func buildMux(config ServeConfig) *mux.Router {
 func makePageHandler(templateName string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
-		log.Printf("Headers: %+v", r.Header)
 		data := TemplateData{Params: params, Headers: r.Header}
 		err := templates.ExecuteTemplate(w, templateName, data)
 		if err != nil {
+			log.Printf("%s %s [500] Error: %+v", r.Method, r.URL, err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			log.Println(err)
 			return
 		}
+		log.Printf("%s %s [200] ", r.Method, r.URL)
 	}
 }
 
@@ -84,7 +84,6 @@ func loadConfig() ServeConfig {
 func localFuncMap(config ServeConfig) map[string]interface{} {
 	funcMap := make(map[string]interface{})
 	funcMap["fetchJSON"] = func(arg1 string, headers map[string][]string) (map[string]interface{}, error) {
-		log.Printf("Headers from context: %+v", headers)
 		u, _ := url.ParseRequestURI(arg1)
 		if u.Scheme == "http" || u.Scheme == "https" {
 			return fetchJSONFromURL(u.String(), getEligibleHeaders(headers, config.PassHeaders))

@@ -4,7 +4,7 @@ cd "${DIR}"
 set -e
 
 BASE_TAG="jedrzejlewandowski/templated"
-VERSION="1.3.1"
+VERSION="1.3.2"
 
 git tag "v${VERSION}"
 git push origin "v${VERSION}"
