@@ -14,6 +14,8 @@
     <li>fetchJSON from env into variable: [ {{ $result := (fetchJSON (env "JSON_FETCH_URI") $.Headers) }} ] [ {{ $result }} ]</li>
     <li>fetchJSON from file: {{ fetchJSON "file:///app/serve.json" $.Headers }}</li>
     <li>fetchJSON from host: {{ fetchJSON "https://api.github.com/users/jblew" $.Headers }}</li>
+    <li>Print strong tag without toHTML: {{ "<strong>Strong</strong>" }}</li>
+    <li>Print strong tag with toHTML: {{ "<strong>Strong</strong>" | toHTML }}</li>
   </ul>
 
 </p>

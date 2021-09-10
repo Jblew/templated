@@ -93,5 +93,8 @@ func localFuncMap(config ServeConfig) map[string]interface{} {
 			return make(map[string]interface{}), fmt.Errorf("Unsupported url scheme \"%s\" in URL: \"%s\"", u.Scheme, arg1)
 		}
 	}
+	funcMap["toHTML"] = func(arg string) template.HTML {
+		return template.HTML(arg)
+	}
 	return funcMap
 }
