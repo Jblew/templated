@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 
 	"github.com/Masterminds/sprig/v3"
 	"github.com/gorilla/mux"
@@ -31,6 +32,8 @@ type TemplateData struct {
 }
 
 var templates *template.Template
+
+var headers = getHeaders()
 
 func main() {
 	config := loadConfig()
@@ -60,6 +63,7 @@ func buildMux(config ServeConfig) *mux.Router {
 func makePageHandler(templateName string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
+		addHeadersToResponse(w, headers)
 		data := TemplateData{Params: params, Headers: r.Header}
 		err := templates.ExecuteTemplate(w, templateName, data)
 		if err != nil {
@@ -97,4 +101,18 @@ func localFuncMap(config ServeConfig) map[string]interface{} {
 		return template.HTML(arg)
 	}
 	return funcMap
+}
+
+func getHeaders() map[string]string {
+	headers := make(map[string]string)
+	headers["Access-Control-Allow-Origin"] = os.Getenv("HEADER_CORS")
+	return headers
+}
+
+func addHeadersToResponse(w http.ResponseWriter, headers map[string]string) {
+	for k, v := range headers {
+		if v != "" {
+			w.Header().Add(k, v)
+		}
+	}
 }
