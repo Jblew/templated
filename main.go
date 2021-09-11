@@ -43,7 +43,7 @@ func main() {
 
 	staticRoute := "/static/"
 	staticFileServer := http.FileServer(http.Dir(config.StaticDir))
-	http.Handle(staticRoute, http.StripPrefix(staticRoute, staticFileServer))
+	http.Handle(staticRoute, http.StripPrefix(staticRoute, headersForFileServer(staticFileServer)))
 
 	r := buildMux(config)
 	http.Handle("/", r)
@@ -114,5 +114,12 @@ func addHeadersToResponse(w http.ResponseWriter, headers map[string]string) {
 		if v != "" {
 			w.Header().Add(k, v)
 		}
+	}
+}
+
+func headersForFileServer(fs http.Handler) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		addHeadersToResponse(w, headers)
+		fs.ServeHTTP(w, r)
 	}
 }
