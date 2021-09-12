@@ -63,15 +63,21 @@ func buildMux(config ServeConfig) *mux.Router {
 func makePageHandler(templateName string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
+
+		verboseInfo := ""
+		if isVerbose {
+			verboseInfo = fmt.Sprintf("Params: %+v ;; Headers: %+v", params, r.Header)
+		}
+
 		addHeadersToResponse(w, headers)
 		data := TemplateData{Params: params, Headers: r.Header}
 		err := templates.ExecuteTemplate(w, templateName, data)
 		if err != nil {
-			log.Printf("%s %s [500] Error: %+v", r.Method, r.URL, err)
+			log.Printf("%s %s [500] Error: %+v. %s", r.Method, r.URL, err, verboseInfo)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		log.Printf("%s %s [200] ", r.Method, r.URL)
+		log.Printf("%s %s [200] %s", r.Method, r.URL, verboseInfo)
 	}
 }
 
