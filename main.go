@@ -33,6 +33,7 @@ type TemplateData struct {
 var templates *template.Template
 
 var headers = getHeaders()
+var isVerbose = os.Getenv("TEMPLATED_VERBOSE") == "1"
 
 func main() {
 	config := loadConfig()

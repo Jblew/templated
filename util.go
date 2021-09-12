@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -45,6 +46,10 @@ func fetchJSONFromURL(url string, headers map[string][]string) (map[string]inter
 		if joinedV != "" && req.Header.Get(k) != "" {
 			req.Header.Add(k, joinedV)
 		}
+	}
+
+	if isVerbose {
+		fmt.Printf("fetchJSON %s, headers: %+v", url, req.Header)
 	}
 
 	client := &http.Client{
