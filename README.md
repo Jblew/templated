@@ -29,8 +29,7 @@ Usage:
      "pages": [
        { "url": "/", "template": "index" },
        { "url": "/role/{roleName}", "template": "role" }
-     ],
-     "passHeaders": ["X-User-Roles"]
+     ]
    }
    ```
 
@@ -40,7 +39,7 @@ Usage:
 
 6. Making http requests inside templates: `{{ $json := fetchJSON "http://api-container:80" $.Headers }}` _Because these are templates and it is intended for usage within containers — the timeout is 300ms_
 
-7. Headers can be passed to the `fetchJSON` — just list them in config file: `"passHeaders": [ "X-User-Roles" ]`
+7. Request headers are automatically to the `fetchJSON`
 
 8. `fetchJSON` can fetch local files as well: `{{ $json := fetchJSON "file://mock/data.json" $.Headers }}`
 

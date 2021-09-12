@@ -40,9 +40,10 @@ func fetchJSONFromURL(url string, headers map[string][]string) (map[string]inter
 		return out, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	for key, values := range headers {
-		for _, value := range values {
-			req.Header.Add(key, value)
+	for k, v := range headers {
+		joinedV := strings.Join(v, ",")
+		if joinedV != "" && req.Header.Get(k) != "" {
+			req.Header.Add(k, joinedV)
 		}
 	}
 
@@ -67,21 +68,18 @@ func fetchJSONFromURL(url string, headers map[string][]string) (map[string]inter
 	return out, nil
 }
 
-func getEligibleHeaders(allHeaders map[string][]string, passHeaders []string) map[string][]string {
-	out := make(map[string][]string)
-	for key, values := range allHeaders {
-		if arrayHasLowerCase(passHeaders, key) {
-			out[key] = values
+func addHeadersToResponse(w http.ResponseWriter, headers map[string]string) {
+	for k, v := range headers {
+		if v != "" {
+			w.Header().Add(k, v)
 		}
 	}
-	return out
 }
 
-func arrayHasLowerCase(haystack []string, needle string) bool {
-	for _, v := range haystack {
-		if strings.TrimSpace(strings.ToLower(v)) == strings.TrimSpace(strings.ToLower(needle)) {
-			return true
+func addHeadersToRequestIfNotExist(req *http.Request, headers map[string]string) {
+	for k, v := range headers {
+		if v != "" && req.Header.Get(k) != "" {
+			req.Header.Add(k, v)
 		}
 	}
-	return false
 }

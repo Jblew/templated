@@ -18,7 +18,6 @@ type ServeConfig struct {
 	StaticDir    string       `json:"staticDir"`
 	TemplatesDir string       `json:"templatesDir"`
 	Pages        []PageConfig `json:"pages"`
-	PassHeaders  []string     `json:"passHeaders"`
 }
 
 type PageConfig struct {
@@ -90,7 +89,7 @@ func localFuncMap(config ServeConfig) map[string]interface{} {
 	funcMap["fetchJSON"] = func(arg1 string, headers map[string][]string) (map[string]interface{}, error) {
 		u, _ := url.ParseRequestURI(arg1)
 		if u.Scheme == "http" || u.Scheme == "https" {
-			return fetchJSONFromURL(u.String(), getEligibleHeaders(headers, config.PassHeaders))
+			return fetchJSONFromURL(u.String(), headers)
 		} else if u.Scheme == "file" {
 			return readJSONFile(u.Path)
 		} else {
@@ -107,14 +106,6 @@ func getHeaders() map[string]string {
 	headers := make(map[string]string)
 	headers["Access-Control-Allow-Origin"] = os.Getenv("HEADER_CORS")
 	return headers
-}
-
-func addHeadersToResponse(w http.ResponseWriter, headers map[string]string) {
-	for k, v := range headers {
-		if v != "" {
-			w.Header().Add(k, v)
-		}
-	}
 }
 
 func headersForFileServer(fs http.Handler) http.HandlerFunc {

@@ -4,6 +4,5 @@
   "pages": [
     { "url": "/", "template": "index" },
     { "url": "/category/{category}", "template": "role" }
-  ],
-  "passHeaders": ["X-User-Role"]
+  ]
 }
