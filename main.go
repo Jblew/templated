@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -33,7 +34,7 @@ type TemplateData struct {
 var templates *template.Template
 
 var headers = getHeaders()
-var isVerbose = os.Getenv("TEMPLATED_VERBOSE") == "1"
+var isVerbose = os.Getenv("TEMPLATED_VERBOSE") == "1" || os.Getenv("TEMPLATED_VERBOSE") == "true"
 
 func main() {
 	config := loadConfig()
@@ -71,12 +72,16 @@ func makePageHandler(templateName string) func(http.ResponseWriter, *http.Reques
 
 		addHeadersToResponse(w, headers)
 		data := TemplateData{Params: params, Headers: r.Header}
-		err := templates.ExecuteTemplate(w, templateName, data)
+		outBuf := bytes.NewBuffer([]byte{})
+		err := templates.ExecuteTemplate(outBuf, templateName, data)
 		if err != nil {
 			log.Printf("%s %s [500] Error: %+v. %s", r.Method, r.URL, err, verboseInfo)
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			w.WriteHeader(500)
+			w.Write(outBuf.Bytes())
+			w.Write([]byte(err.Error()))
 			return
 		}
+		w.Write(outBuf.Bytes())
 		log.Printf("%s %s [200] %s", r.Method, r.URL, verboseInfo)
 	}
 }
