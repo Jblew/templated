@@ -20,7 +20,6 @@ func fetchJSONFromFile(path string) (map[string]interface{}, error) {
 }
 
 func fetchJSONFromURL(url string, headers map[string][]string) (map[string]interface{}, error) {
-	fmt.Printf("Got headers of request: %+v\n", headers)
 	out := make(map[string]interface{})
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
@@ -29,7 +28,7 @@ func fetchJSONFromURL(url string, headers map[string][]string) (map[string]inter
 	req.Header.Set("Content-Type", "application/json")
 	for k, v := range headers {
 		joinedV := strings.Join(v, ",")
-		if joinedV != "" && req.Header.Get(k) != "" {
+		if joinedV != "" && req.Header.Get(k) == "" {
 			req.Header.Add(k, joinedV)
 		}
 	}
