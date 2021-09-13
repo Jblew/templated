@@ -48,10 +48,6 @@ func fetchJSONFromURL(url string, headers map[string][]string) (map[string]inter
 		}
 	}
 
-	if isVerbose {
-		fmt.Printf("fetchJSON %s, headers: %+v", url, req.Header)
-	}
-
 	client := &http.Client{
 		Timeout: 300 * time.Millisecond,
 	}
@@ -63,13 +59,36 @@ func fetchJSONFromURL(url string, headers map[string][]string) (map[string]inter
 
 	responseBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
+		if isVerbose {
+			fmt.Printf("fetchJSON %s FAILED [%d], err: %+v\n", url, resp.StatusCode, err)
+		}
 		return out, err
 	}
 
 	err = json.Unmarshal(responseBody, &out)
 	if err != nil {
+		if isVerbose {
+			fmt.Printf("fetchJSON %s FAILED [%d], err: %+v\n", url, resp.StatusCode, err)
+		}
 		return out, err
 	}
+
+	if resp.StatusCode != 200 {
+		outError := ""
+		_, hasError := out["error"]
+		if hasError {
+			outError = fmt.Sprintf("%+v", out["error"])
+		}
+		if isVerbose {
+			fmt.Printf("fetchJSON %s FAILED [%d], headers: %+v\n", url, resp.StatusCode, req.Header)
+		}
+		return out, fmt.Errorf("fetchJSON %s FAILED [%d]: %s", url, resp.StatusCode, outError)
+	} else {
+		if isVerbose {
+			fmt.Printf("fetchJSON %s [%d], headers: %+v\n", url, resp.StatusCode, req.Header)
+		}
+	}
+
 	return out, nil
 }
 
