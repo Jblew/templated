@@ -45,7 +45,7 @@ Usage:
 
 9. Use within you docker container:
    ```Dockerfile
-   FROM jedrzejlewandowski/templated:1.0.0
+   FROM jedrzejlewandowski/templated:1.7.3
    WORKDIR /app
    ADD serve.json /app/serve.json
    ADD templates /app/templates
